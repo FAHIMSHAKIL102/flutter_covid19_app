@@ -44,7 +44,6 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                 if (!snapshot.hasData) {
                   return ListView.builder(
                     itemBuilder: (context, index) {
-                      final item = snapshot.data![index];
                       return Shimmer.fromColors(
                         baseColor: Colors.grey.shade700,
                         highlightColor: Colors.grey.shade100,
@@ -75,9 +74,8 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                       String name = snapshot.data![index]['country'];
                       final item = snapshot.data![index];
                       if (searchController.text.isEmpty) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.push(
+                        return InkWell(onTap: () {
+                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => DetailsScreen(
@@ -92,15 +90,18 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                 ),
                               ),
                             );
-                          },
-                          leading: Image(
-                            height: 50,
-                            width: 50,
-                            image: NetworkImage(
-                              snapshot.data![index]['countryInfo']['flag'],
+                        },
+                          child: ListTile(
+                            
+                            leading: Image(
+                              height: 50,
+                              width: 50,
+                              image: NetworkImage(
+                                snapshot.data![index]['countryInfo']['flag'],
+                              ),
                             ),
+                            title: Text(snapshot.data![index]['country']),
                           ),
-                          title: Text(snapshot.data![index]['country']),
                         );
                       } else if (name.toLowerCase().contains(
                         searchController.text.toLowerCase(),

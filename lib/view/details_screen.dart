@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_covid19_app/view/world_states_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
-   String name;
-   String image;
-   int totalCases;
-   int totalDeaths;
-   int totalRecovered;
-   int active;
-   int critical;
-   int test;
-   DetailsScreen({
+  final String name;
+  final String image;
+  final int totalCases;
+  final int totalDeaths;
+  final int totalRecovered;
+  final int active;
+  final int critical;
+  final int test;
+  const DetailsScreen({
     super.key,
     required this.name,
     required this.image,
@@ -70,7 +70,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         title: 'Active',
                         value: widget.active.toString(),
                       ),
-                      
+                     
                     ],
                   ),
                 ),
