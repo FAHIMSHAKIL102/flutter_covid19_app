@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'dart:math' as math;
+
+import 'package:flutter_covid19_app/view/world_states_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,6 +29,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
+    Timer(
+      Duration(seconds: 5),
+      () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WorldStatesScreen()),
+      ),
+    );
   }
 
   @override
@@ -40,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen>
               builder: (BuildContext context, Widget? child) {
                 return Transform.rotate(
                   angle: _controller.value * 2.0 * math.pi,
-                  child: Container(
+                  child: SizedBox(
                     height: 200,
                     width: 200,
                     child: Image(image: AssetImage('assets/images/virus.png')),
