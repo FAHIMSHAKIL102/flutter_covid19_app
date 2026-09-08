@@ -62,7 +62,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         title: 'Critical',
                         value: widget.critical.toString(),
                       ),
-                       DescriptionRow(
+                      DescriptionRow(
                         title: 'Total Recovered',
                         value: widget.totalRecovered.toString(),
                       ),
@@ -70,7 +70,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         title: 'Active',
                         value: widget.active.toString(),
                       ),
-                     
                     ],
                   ),
                 ),
