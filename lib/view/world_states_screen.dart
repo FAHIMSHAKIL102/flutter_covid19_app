@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_covid19_app/model/world_states_model.dart';
 import 'package:flutter_covid19_app/services/states_services.dart';
+import 'package:flutter_covid19_app/view/countries_list_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pie_chart/pie_chart.dart';
 
@@ -111,16 +112,26 @@ class _WorldStatesScreenState extends State<WorldStatesScreen>
                             ),
                           ),
                         ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color(0xff1aa260),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Track Countries',
-                              style: TextStyle(fontSize: 18),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CountriesListScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Color(0xff1aa260),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Track Countries',
+                                style: TextStyle(fontSize: 18),
+                              ),
                             ),
                           ),
                         ),
