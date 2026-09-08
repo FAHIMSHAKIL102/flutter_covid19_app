@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_covid19_app/services/states_services.dart';
+import 'package:flutter_covid19_app/view/details_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CountriesListScreen extends StatefulWidget {
@@ -43,6 +44,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                 if (!snapshot.hasData) {
                   return ListView.builder(
                     itemBuilder: (context, index) {
+                      final item = snapshot.data![index];
                       return Shimmer.fromColors(
                         baseColor: Colors.grey.shade700,
                         highlightColor: Colors.grey.shade100,
@@ -71,37 +73,64 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       String name = snapshot.data![index]['country'];
+                      final item = snapshot.data![index];
                       if (searchController.text.isEmpty) {
-                        return Column(
-                          children: [
-                            ListTile(
-                              leading: Image(
-                                height: 50,
-                                width: 50,
-                                image: NetworkImage(
-                                  snapshot.data![index]['countryInfo']['flag'],
+                        return ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                  name: item['country'],
+                                  image: item['countryInfo']['flag'],
+                                  totalCases: item['cases'],
+                                  totalDeaths: item['deaths'],
+                                  totalRecovered: item['recovered'],
+                                  active: item['active'],
+                                  critical: item['critical'],
+                                  test: item['tests'],
                                 ),
                               ),
-                              title: Text(snapshot.data![index]['country']),
+                            );
+                          },
+                          leading: Image(
+                            height: 50,
+                            width: 50,
+                            image: NetworkImage(
+                              snapshot.data![index]['countryInfo']['flag'],
                             ),
-                          ],
+                          ),
+                          title: Text(snapshot.data![index]['country']),
                         );
                       } else if (name.toLowerCase().contains(
                         searchController.text.toLowerCase(),
                       )) {
-                        return Column(
-                          children: [
-                            ListTile(
-                              leading: Image(
-                                height: 50,
-                                width: 50,
-                                image: NetworkImage(
-                                  snapshot.data![index]['countryInfo']['flag'],
+                        return ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                  name: item['country'],
+                                  image: item['countryInfo']['flag'],
+                                  totalCases: item['cases'],
+                                  totalDeaths: item['deaths'],
+                                  totalRecovered: item['recovered'],
+                                  active: item['active'],
+                                  critical: item['critical'],
+                                  test: item['tests'],
                                 ),
                               ),
-                              title: Text(snapshot.data![index]['country']),
+                            );
+                          },
+                          leading: Image(
+                            height: 50,
+                            width: 50,
+                            image: NetworkImage(
+                              snapshot.data![index]['countryInfo']['flag'],
                             ),
-                          ],
+                          ),
+                          title: Text(snapshot.data![index]['country']),
                         );
                       } else {
                         return SizedBox();
