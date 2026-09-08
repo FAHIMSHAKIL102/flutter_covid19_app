@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_covid19_app/model/world_states_model.dart';
+import 'package:flutter_covid19_app/services/states_services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class WorldStatesScreen extends StatefulWidget {
@@ -31,6 +34,9 @@ class _WorldStatesScreenState extends State<WorldStatesScreen>
   Widget build(BuildContext context) {
     double h = MediaQuery.heightOf(context);
     double w = MediaQuery.widthOf(context);
+
+    StatesServices statesServices = StatesServices();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -38,41 +44,98 @@ class _WorldStatesScreenState extends State<WorldStatesScreen>
           child: Column(
             children: [
               SizedBox(height: h * .01),
-              PieChart(
-                dataMap: {'Total': 40, 'Recovered': 35, 'Deaths': 25},
-                chartRadius: w / 2,
-                legendOptions: LegendOptions(
-                  legendPosition: LegendPosition.left,
-                ),
-                animationDuration: Duration(seconds: 2),
-                chartType: ChartType.ring,
-                colorList: colorList,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: h * .06),
-                child: Card(
-                  child: Column(
-                    children: [
-                      DescriptionRow(title: 'title', value: 'value'),
-                      DescriptionRow(title: 'title', value: 'value'),
-                      DescriptionRow(title: 'title', value: 'value'),
-                      DescriptionRow(title: 'title', value: 'value'),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xff1aa260),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text(
-                    'Track Countries',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+              FutureBuilder(
+                future: statesServices.fetchWorldStatesRecords(),
+                builder: (context, AsyncSnapshot<WorldStatesModel> snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        PieChart(
+                          dataMap: {
+                            'Total': double.parse(
+                              snapshot.data!.cases.toString(),
+                            ),
+                            'Recovered': double.parse(
+                              snapshot.data!.recovered.toString(),
+                            ),
+                            'Deaths': double.parse(
+                              snapshot.data!.deaths.toString(),
+                            ),
+                          },
+                          chartValuesOptions: ChartValuesOptions(
+                            showChartValuesInPercentage: true,
+                          ),
+                          chartRadius: w / 2,
+                          legendOptions: LegendOptions(
+                            legendPosition: LegendPosition.left,
+                          ),
+                          animationDuration: Duration(seconds: 2),
+                          chartType: ChartType.ring,
+                          colorList: colorList,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: h * .06),
+                          child: Card(
+                            child: Column(
+                              children: [
+                                DescriptionRow(
+                                  title: 'Total Cases',
+                                  value: snapshot.data!.cases.toString(),
+                                ),
+                                DescriptionRow(
+                                  title: 'Deaths',
+                                  value: snapshot.data!.deaths.toString(),
+                                ),
+                                DescriptionRow(
+                                  title: 'Active',
+                                  value: snapshot.data!.active.toString(),
+                                ),
+                                DescriptionRow(
+                                  title: 'Critical',
+                                  value: snapshot.data!.critical.toString(),
+                                ),
+                                DescriptionRow(
+                                  title: 'Recovered',
+                                  value: snapshot.data!.recovered.toString(),
+                                ),
+                                DescriptionRow(
+                                  title: 'Today Deaths',
+                                  value: snapshot.data!.todayDeaths.toString(),
+                                ),
+                                DescriptionRow(
+                                  title: 'Today Recovered',
+                                  value: snapshot.data!.todayRecovered
+                                      .toString(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Color(0xff1aa260),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Track Countries',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Expanded(
+                      child: SpinKitFadingCircle(
+                        color: Colors.white,
+                        size: 50,
+                        controller: _controller,
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -95,7 +158,7 @@ class DescriptionRow extends StatelessWidget {
           Row(
             mainAxisAlignment: .spaceBetween,
             children: [
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(title, style: TextStyle(fontSize: 16)),
               Text(value),
             ],
           ),
